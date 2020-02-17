@@ -1,4 +1,4 @@
-package com.myapp.yongwoo.main.todo
+package com.myapp.yongwoo.main.done
 
 import android.app.AlertDialog
 import android.content.Context
@@ -10,56 +10,60 @@ import androidx.recyclerview.widget.RecyclerView
 import com.myapp.yongwoo.R
 import com.myapp.yongwoo.add_edit.AddEditActivity
 import com.myapp.yongwoo.room.database.MyDatabase
-import com.myapp.yongwoo.room.entity.TodoItem
+import com.myapp.yongwoo.room.entity.DoneItem
+import java.text.SimpleDateFormat
+import java.util.*
 
-class TodoAdaptor(private val context: Context) : RecyclerView.Adapter<TodoVeiwHolder>() {
-    private var items: MutableList<TodoItem> = mutableListOf()
+class DoneAdaptor(private val context: Context) : RecyclerView.Adapter<DoneVeiwHolder>() {
+
+
+    private var items: MutableList<DoneItem> = mutableListOf()
     private val myDatabase = MyDatabase.getInstance(context)
-
-
     //생성자가 만들어진다.
     init {
-        val itemList = myDatabase?.todoDao()?.getAllTodo()?.also {
+        val itemList = myDatabase?.doneDao()?.getAllDone()?.also {
             items.addAll(it)
         }
         notifyDataSetChanged()
     }
 
-    fun deleteItem(item: TodoItem) {
+    fun deleteItem(item: DoneItem) {
         items.remove(item)
-        myDatabase?.todoDao()?.deleteTodo(item)
+        myDatabase?.doneDao()?.deleteDone(item)
         notifyDataSetChanged()
     }
 
-    fun addItem(item: TodoItem) {
+    fun addItem(item: DoneItem) {
         items.add(item)
-        myDatabase?.todoDao()?.insertTodo(item)
+        myDatabase?.doneDao()?.insertDone(item)
         notifyDataSetChanged()
     }
 
     fun refresh() {
-        myDatabase?.todoDao()?.getAllTodo()?.also {
+        myDatabase?.doneDao()?.getAllDone()?.also {
             items.clear()
             items.addAll(it)
             notifyDataSetChanged()
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoVeiwHolder {
-        val viewHolder: TodoVeiwHolder =
-            TodoVeiwHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DoneVeiwHolder {
+        val viewHolder: DoneVeiwHolder =
+            DoneVeiwHolder(
                 LayoutInflater.from(parent.context).inflate(
-                    R.layout.item_todo,
+                    R.layout.item_done,
                     parent,
                     false
                 )
             )
 
+
         viewHolder.itemView.setOnClickListener{
-            items[viewHolder.adapterPosition].checked = !items[viewHolder.adapterPosition].checked
-            myDatabase?.todoDao()?.updateTodo(items[viewHolder.adapterPosition])
-            notifyDataSetChanged()
+            if(items[viewHolder.adapterPosition].checked) {
+                myDatabase?.doneDao()?.doneItem = SimpleDateFormat("yyyy년 mm월 dd일 hh:mm:ss").format(Date())
+            }
         }
+
 
         viewHolder.itemView.setOnLongClickListener {
             val builder = AlertDialog.Builder(parent.context)
@@ -72,7 +76,7 @@ class TodoAdaptor(private val context: Context) : RecyclerView.Adapter<TodoVeiwH
                     "수정" -> {
                         Intent(context, AddEditActivity::class.java).let {
                             it.putExtra(AddEditActivity.MODE_KEY, AddEditActivity.MODE_EDIT)
-                            it.putExtra("todo_id", items[viewHolder.adapterPosition].id)
+                            it.putExtra("done_id", items[viewHolder.adapterPosition].id)
                             context.startActivity(it)
                         }
                     }
@@ -95,8 +99,9 @@ class TodoAdaptor(private val context: Context) : RecyclerView.Adapter<TodoVeiwH
         return items.size
     }
 
-    override fun onBindViewHolder(holder: TodoVeiwHolder, position: Int) {
+    override fun onBindViewHolder(holder: DoneVeiwHolder, position: Int) {
         holder.onBind(items[position])
     }
 
 }
+
