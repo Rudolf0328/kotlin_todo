@@ -14,7 +14,7 @@ interface DoneDao {
     @Update
     fun updateDone(item: DoneItem)
 
-    @Query("SELECT * from DoneItem ORDER BY dDate")
+    @Query("SELECT * from DoneItem ORDER BY doneDate")
     fun getAllDone(): List<DoneItem>
 
     @Query("SELECT * from DoneItem WHERE id = :id")

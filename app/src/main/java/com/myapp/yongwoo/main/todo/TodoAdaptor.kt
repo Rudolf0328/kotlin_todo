@@ -12,7 +12,7 @@ import com.myapp.yongwoo.add_edit.AddEditActivity
 import com.myapp.yongwoo.room.database.MyDatabase
 import com.myapp.yongwoo.room.entity.TodoItem
 
-class TodoAdaptor(private val context: Context) : RecyclerView.Adapter<TodoVeiwHolder>() {
+class TodoAdaptor(private val context: Context) : RecyclerView.Adapter<TodoViewHolder>() {
     private var items: MutableList<TodoItem> = mutableListOf()
     private val myDatabase = MyDatabase.getInstance(context)
 
@@ -45,9 +45,9 @@ class TodoAdaptor(private val context: Context) : RecyclerView.Adapter<TodoVeiwH
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoVeiwHolder {
-        val viewHolder: TodoVeiwHolder =
-            TodoVeiwHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
+        val viewHolder: TodoViewHolder =
+            TodoViewHolder(
                 LayoutInflater.from(parent.context).inflate(
                     R.layout.item_todo,
                     parent,
@@ -95,7 +95,7 @@ class TodoAdaptor(private val context: Context) : RecyclerView.Adapter<TodoVeiwH
         return items.size
     }
 
-    override fun onBindViewHolder(holder: TodoVeiwHolder, position: Int) {
+    override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
         holder.onBind(items[position])
     }
 

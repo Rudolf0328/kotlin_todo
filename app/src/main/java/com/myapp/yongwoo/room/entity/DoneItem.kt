@@ -5,11 +5,13 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "DoneItem")
 data class DoneItem(
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey(autoGenerate = true)
     val id: Int,
     var name: String,
+    var sDate: String,
+    var dDate: String,
+    var memo: String,
     var doneDate: String
-//    var doneDate: String
 ) {
     var checked: Boolean = false
 }

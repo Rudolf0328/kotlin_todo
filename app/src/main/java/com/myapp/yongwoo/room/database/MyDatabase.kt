@@ -6,9 +6,10 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.myapp.yongwoo.room.dao.DoneDao
 import com.myapp.yongwoo.room.dao.TodoDao
+import com.myapp.yongwoo.room.entity.DoneItem
 import com.myapp.yongwoo.room.entity.TodoItem
 
-@Database(entities = [TodoItem::class], version = 1)
+@Database(entities = [TodoItem::class, DoneItem::class], version = 1)
 abstract class MyDatabase : RoomDatabase() {
     abstract fun todoDao() : TodoDao
     abstract fun doneDao() : DoneDao

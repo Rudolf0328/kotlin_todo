@@ -14,14 +14,14 @@ import com.myapp.yongwoo.room.entity.DoneItem
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DoneAdaptor(private val context: Context) : RecyclerView.Adapter<DoneVeiwHolder>() {
+class DoneAdaptor(private val context: Context) : RecyclerView.Adapter<DoneViewHolder>() {
 
 
     private var items: MutableList<DoneItem> = mutableListOf()
     private val myDatabase = MyDatabase.getInstance(context)
     //생성자가 만들어진다.
     init {
-        val itemList = myDatabase?.doneDao()?.getAllDone()?.also {
+         myDatabase?.doneDao()?.getAllDone()?.also {
             items.addAll(it)
         }
         notifyDataSetChanged()
@@ -47,23 +47,15 @@ class DoneAdaptor(private val context: Context) : RecyclerView.Adapter<DoneVeiwH
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DoneVeiwHolder {
-        val viewHolder: DoneVeiwHolder =
-            DoneVeiwHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DoneViewHolder {
+        val viewHolder: DoneViewHolder =
+            DoneViewHolder(
                 LayoutInflater.from(parent.context).inflate(
                     R.layout.item_done,
                     parent,
                     false
                 )
             )
-
-
-        viewHolder.itemView.setOnClickListener{
-            if(items[viewHolder.adapterPosition].checked) {
-                myDatabase?.doneDao()?.doneItem = SimpleDateFormat("yyyy년 mm월 dd일 hh:mm:ss").format(Date())
-            }
-        }
-
 
         viewHolder.itemView.setOnLongClickListener {
             val builder = AlertDialog.Builder(parent.context)
@@ -99,7 +91,7 @@ class DoneAdaptor(private val context: Context) : RecyclerView.Adapter<DoneVeiwH
         return items.size
     }
 
-    override fun onBindViewHolder(holder: DoneVeiwHolder, position: Int) {
+    override fun onBindViewHolder(holder: DoneViewHolder, position: Int) {
         holder.onBind(items[position])
     }
 

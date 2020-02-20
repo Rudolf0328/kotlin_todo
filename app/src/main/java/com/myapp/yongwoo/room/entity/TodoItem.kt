@@ -3,7 +3,7 @@ package com.myapp.yongwoo.room.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "todo")
+@Entity(tableName = "TodoItem")
 data class TodoItem(
     @PrimaryKey(autoGenerate = true)
     val id: Int,

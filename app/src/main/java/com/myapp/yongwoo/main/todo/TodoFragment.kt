@@ -13,9 +13,12 @@ import com.myapp.yongwoo.R
 import com.myapp.yongwoo.add_edit.AddEditActivity
 import com.myapp.yongwoo.room.database.MyDatabase
 import com.myapp.yongwoo.room.entity.DoneItem
+import com.myapp.yongwoo.room.entity.TodoItem
 import kotlinx.android.synthetic.main.activity_add_edit.*
 import kotlinx.android.synthetic.main.fragment_todo.*
 import kotlinx.android.synthetic.main.item_todo.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class TodoFragment : Fragment() {
 
@@ -24,6 +27,7 @@ class TodoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setHasOptionsMenu(true)
         adapter = TodoAdaptor(view.context)
         main_rcv_item.adapter = adapter
         main_rcv_item.layoutManager = LinearLayoutManager(view.context, RecyclerView.VERTICAL, false)
@@ -34,7 +38,7 @@ class TodoFragment : Fragment() {
             }
             startActivity(intent)
         }
-    }
+   }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_todo, container, false)
@@ -49,23 +53,31 @@ class TodoFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.menu_done, menu)
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val myDatabase = MyDatabase.getInstance(this)
+        val myDatabase = MyDatabase.getInstance(context!!)    //this하면 빨간색 줄이에요
 
         when (item.itemId) {
 
             R.id.menu_done -> {
-                val title = todo_tv_name.toString()
-                val doneTime = add_edit_til_due_date.toString()
-
-                DoneItem(0, title, doneTime).also {
-                    myDatabase?.doneDao()?.insertDone(it)
+                val myDatabase = MyDatabase.getInstance(context!!)
+                myDatabase?.todoDao()?.getTodoDone()?.let {
+                    for(item in it) {
+                        myDatabase.doneDao().insertDone(changeDoneItem(item))
+                        myDatabase.todoDao().deleteTodo(item)
+                    }
+                    adapter?.refresh()
                 }
+
             }
 
         }
         return super.onOptionsItemSelected(item)
+    }
+    private fun changeDoneItem(item: TodoItem): DoneItem {
+        val today = SimpleDateFormat("yyyy/MM/dd").format(Date())
+        return DoneItem(0, item.name, item.sDate, item.dDate, item.memo, today)
     }
 }
