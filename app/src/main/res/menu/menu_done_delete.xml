@@ -2,6 +2,9 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="Select" />
-    <item android:title="Delete All" />
+    <item android:title="Select"
+        android:id="@+id/done_menu_select"/>
+
+    <item android:title="Delete All"
+        android:id="@+id/done_menu_deleteAll"/>
 </menu>

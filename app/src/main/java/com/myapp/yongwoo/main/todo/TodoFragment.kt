@@ -76,6 +76,7 @@ class TodoFragment : Fragment() {
         }
         return super.onOptionsItemSelected(item)
     }
+
     private fun changeDoneItem(item: TodoItem): DoneItem {
         val today = SimpleDateFormat("yyyy/MM/dd").format(Date())
         return DoneItem(0, item.name, item.sDate, item.dDate, item.memo, today)

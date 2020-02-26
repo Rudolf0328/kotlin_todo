@@ -19,4 +19,7 @@ interface DoneDao {
 
     @Query("SELECT * from DoneItem WHERE id = :id")
     fun getDone(id: Int): DoneItem
+
+    @Query("DELETE from DoneItem")
+    fun deleteAllDone()
 }
