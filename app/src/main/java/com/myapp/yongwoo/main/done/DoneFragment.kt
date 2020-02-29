@@ -16,11 +16,12 @@ class DoneFragment : Fragment() {
     private var adapter: DoneAdaptor? = null
 
     var items: MutableList<DoneItem> = mutableListOf()
-    val myDatabase = MyDatabase.getInstance(context!!)
+    private lateinit var myDatabase: MyDatabase
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setHasOptionsMenu(true)
         adapter = DoneAdaptor(view.context)
         done_rcv_item.adapter = adapter
         done_rcv_item.layoutManager = LinearLayoutManager(view.context, RecyclerView.VERTICAL, false)
@@ -28,6 +29,7 @@ class DoneFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        myDatabase = MyDatabase.getInstance(context!!)!!
         return inflater.inflate(R.layout.fragment_done, container, false)
     }
 
@@ -51,6 +53,8 @@ class DoneFragment : Fragment() {
 
             R.id.done_menu_deleteAll -> {
                 myDatabase?.doneDao()?.deleteAllDone()
+                adapter?.notifyDataSetChanged()
+                adapter?.refresh()
             }
 
         }
